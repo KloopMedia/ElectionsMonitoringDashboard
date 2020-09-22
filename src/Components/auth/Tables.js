@@ -16,7 +16,8 @@ class App extends Component {
 		tablets: [],
 		data: [],
 		columns: [],
-
+		users: [],
+		users_by_column: {}
 	}
 
 	downloadData = () => {
@@ -41,10 +42,8 @@ class App extends Component {
 		}
 	}
 
-
 	componentDidMount() {
 		this.downloadData()
-
 	}
 
 	render() {
@@ -60,12 +59,12 @@ class App extends Component {
 					})
 					}
 					<Switch>
-					{this.state.tablets.map((el, i) => (
-						<Route key={i} path={"/kloop-table/tablets" + el.path}>
-							{() => <Template url={el.url} label={el.label}/>}
-						</Route>
-					))}
-				</Switch>
+						{this.state.tablets.map((el, i) => (
+							<Route key={i} path={"/kloop-table/tablets" + el.path}>
+								{() => <Template url={el.url} label={el.label}/>}
+							</Route>
+						))}
+					</Switch>
 				</Router>
 
 			</div>
