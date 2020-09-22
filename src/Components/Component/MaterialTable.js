@@ -5,7 +5,7 @@ export default function MTable(props) {
 
 
 	return (<MaterialTable
-		title="Name and Role"
+		title={props.title}
 		columns={props.columns}
 		data={props.data}
 		cellEditable={{

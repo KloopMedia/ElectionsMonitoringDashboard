@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react'
-import firebase from "../utils/firebaseA";
+import firebase from "../../utils/firebaseA";
 
 import MaterialTable from "../Component/MaterialTable";
 
@@ -25,7 +25,7 @@ class App extends Component {
 				.then((data) => {
 					console.log("DATA", data);
 					this.setState({
-						columns: data.fields
+						columns: data.fields.mainAdminTable
 					})
 				});
 		} else {

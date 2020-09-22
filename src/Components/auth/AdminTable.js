@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import MaterialTable from 'material-table'
-import firebase from '../utils/firebase'
+import firebase from '../../utils/firebase'
 
 import DoneIcon from '@material-ui/icons/Done';
 import Tooltip from '@material-ui/core/Tooltip';
