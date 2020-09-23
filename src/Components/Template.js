@@ -11,7 +11,8 @@ class App extends Component {
 		columns: [],
 		users: [],
 		users_data: [],
-		users_row: []
+		users_row: [],
+		ready: false
 	}
 
 	downloadData = (url) => {
@@ -39,8 +40,58 @@ class App extends Component {
 							let userRef = rootRef.doc(user)
 							let answersRef = userRef.collection("answers")
 							answersRef.where("form_name", "==", this.state.main_title).get().then(querySnapshot => {
-								querySnapshot.forEach(snap => {
-									this.state.users_data.push(snap.data())
+								querySnapshot.forEach((snap, index) => {
+									let row = {}
+									let element = snap.data()
+									if (element) {
+										let keys = Object.keys(this.state.columns)
+										// console.log(element.answers)
+										let answers = []
+
+
+										this.state.questions.forEach((question, ind) => {
+											if (element.answers[ind]) {
+												// console.log(ind)
+												console.log(question)
+												console.log(element.answers[ind])
+											}
+											if (question.type === 'multiradio') {
+												let len = question.subquestion.length
+												for (let i = 0; i < len; i++) {
+													if (element.answers[ind] && element.answers[ind][i]) {
+														answers.push(element.answers[ind][i])
+													}
+													else {
+														answers.push('-')
+													}
+												}
+											}
+											else {
+												if (element.answers[ind]) {
+													answers.push(element.answers[ind])
+												}
+												else {
+													answers.push('-')
+												}
+											}
+										})
+
+
+										console.log(answers)
+
+										keys.forEach(key => {
+											if (answers[key]) {
+												row[key] = answers[key]
+											}
+											else {
+												row[key] = "-"
+											}
+										})
+										let arr = [...this.state.users_row]
+										arr.push(row)
+										this.setState({users_row: arr})
+										console.log(arr)
+									}
 								})
 							})
 						})
@@ -53,54 +104,32 @@ class App extends Component {
 	}
 
 	columns() {
-		let cols = this.state.questions.map((el, i) => {
-			return {title: el.title, field: i, editable: "never"}
+		let tmpCols = []
+
+		this.state.questions.forEach((el, i) => {
+			if (el.type === 'multiradio') {
+				el.subquestion.forEach(subquestion => tmpCols.push({title: subquestion.q, editable: "never"}))
+			}
+			else {
+				tmpCols.push({title: el.title, editable: "never"})
+			}
 		})
-		cols.push({title: 'Date', field: 'date', editable: "never"})
-		cols.push({title: 'Timestamp', field: 'timestamp', editable: "never"})
+		let cols = tmpCols.map((col, i) => col = {...col, field: i})
+		console.log(cols)
 		this.setState({columns: cols})
 	}
 
 	componentDidMount() {
 		this.downloadData(this.props.url)
-
 	}
 
-	rowField() {
-		const dataRows = []
-		this.state.users_data.map((element, index) => {
-			let row = {}
-			this.state.columns.forEach((el, i) => {
-				row[el.field] = '-'
-			})
-			Object.keys(row).forEach(key => {
 
-				if (element.answers[key] != undefined) {
-					row[key] = element.answers[key]
-				} else {
-					row[key] = '-'
-				}
-			})
-			// row.date = element.date
-			// row.timestamp = element.timestamp
-			console.log(row)
-
-			dataRows[index] = row
-		})
-
-
-		this.setState({users_row: dataRows})
-
-	}
 
 	render() {
-
 		return (
 			<div className="App">
-				<button onClick={() => console.log(this.state)}>show state</button>
-				<button onClick={() => this.rowField()}>show rowField</button>
-				<h2>Заполнило форму {this.state.users_data.length}</h2>
-				{/*<MaterialTable columns={this.state.columns} title={this.state.main_title} data={this.state.users_row}/>*/}
+				<button onClick={() => this.setState({ready: true})}>Set ready</button>
+				{this.state.ready ? <MaterialTable columns={this.state.columns} title={this.state.main_title} data={this.state.users_row}/> : null}
 			</div>
 		);
 	};
