@@ -54,13 +54,13 @@ class App extends Component {
 					{this.state.tablets.map((el, i) => {
 						return (
 							<li key={i}>
-								<Link to={'/kloop-table/tablets' + el.path + window.location.search}>{el.label}</Link>
+								<Link to={'/ElectionsMonitoringDashboard/tablets' + el.path + window.location.search}>{el.label}</Link>
 							</li>)
 					})
 					}
 					<Switch>
 						{this.state.tablets.map((el, i) => (
-							<Route key={i} path={"/kloop-table/tablets" + el.path}>
+							<Route key={i} path={"/ElectionsMonitoringDashboard/tablets" + el.path}>
 								{() => <Template url={el.url} label={el.label}/>}
 							</Route>
 						))}

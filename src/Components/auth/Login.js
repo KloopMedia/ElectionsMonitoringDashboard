@@ -8,7 +8,7 @@ const Login = ({ history }) => {
   const { currentUser } = useContext(AuthContext);
 
   if (currentUser) {
-    return <Redirect to={"/kloop-table/" + window.location.search} />;
+    return <Redirect to={"/ElectionsMonitoringDashboard/" + window.location.search} />;
   }
 
   return (

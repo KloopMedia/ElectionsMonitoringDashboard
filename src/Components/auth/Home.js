@@ -45,21 +45,21 @@ const Home = () => {
 					<nav>
 						<ul>
 							<li>
-								<Link to={"/kloop-table/tablets" + window.location.search}>Формы</Link>
+								<Link to={"/ElectionsMonitoringDashboard/tablets" + window.location.search}>Формы</Link>
 							</li>
 							<li>
-								<Link to={"/kloop-table/admin" + window.location.search}>Таблица Атая</Link>
+								<Link to={"/ElectionsMonitoringDashboard/admin" + window.location.search}>Таблица Атая</Link>
 							</li>
 							<li>
-								<Link to={"/kloop-table/admin-role" + window.location.search}>Таблица юзеров с ролями</Link>
+								<Link to={"/ElectionsMonitoringDashboard/admin-role" + window.location.search}>Таблица юзеров с ролями</Link>
 							</li>
 						</ul>
 					</nav>
 
 					<Switch>
-						<Route exact path="/kloop-table/tablets" component={Tablets}/>
-						<Route exact path="/kloop-table/admin" component={AdminTable}/>
-						<Route exact path="/kloop-table/admin-role" component={MainAdminTable}/>
+						<Route exact path="/ElectionsMonitoringDashboard/tablets" component={Tablets}/>
+						<Route exact path="/ElectionsMonitoringDashboard/admin" component={AdminTable}/>
+						<Route exact path="/ElectionsMonitoringDashboard/admin-role" component={MainAdminTable}/>
 					</Switch>
 				</div>
 			</Router>

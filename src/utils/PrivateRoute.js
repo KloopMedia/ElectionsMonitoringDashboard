@@ -11,7 +11,7 @@ const PrivateRoute = ({ component: RouteComponent, ...rest }) => {
         !!currentUser ? (
           <RouteComponent {...routeProps} />
         ) : (
-          <Redirect to={"/kloop-table/login" + window.location.search} />
+          <Redirect to={"/ElectionsMonitoringDashboard/login" + window.location.search} />
         )
       }
     />
