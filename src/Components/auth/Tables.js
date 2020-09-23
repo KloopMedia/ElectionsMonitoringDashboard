@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react'
-import firebase from "../../utils/firebaseA";
+import firebase from "../../utils/firebase";
 import Template from "../Template"
 import {
 	BrowserRouter as Router,

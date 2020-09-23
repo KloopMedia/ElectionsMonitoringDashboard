@@ -1,5 +1,5 @@
 import React, {Component, useState} from 'react'
-import firebase from "../../utils/firebaseA";
+import firebase from "../../utils/firebase";
 
 import MaterialTable from "../Component/MaterialTable";
 
@@ -60,14 +60,6 @@ class App extends Component {
 
 			this.setState({data: dataRows})
 		})
-
-		/*let rootRefCol = firebase.database().ref()
-
-		rootRefCol.on('value', snap=>{
-			const columns = Object.values(snap.val())
-			this.setState({columns: columns})
-
-		})*/
 
 	}
 

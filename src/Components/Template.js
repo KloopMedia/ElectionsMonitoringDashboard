@@ -42,7 +42,7 @@ class App extends Component {
 								querySnapshot.forEach(snap => {
 									this.state.users_data.push(snap.data())
 								})
-							}).then(this.rowField())
+							})
 						})
 					})
 				});
@@ -53,9 +53,8 @@ class App extends Component {
 	}
 
 	columns() {
-
 		let cols = this.state.questions.map((el, i) => {
-			return {title: el.title, field: `a${i}`, editable: "never"}
+			return {title: el.title, field: i, editable: "never"}
 		})
 		cols.push({title: 'Date', field: 'date', editable: "never"})
 		cols.push({title: 'Timestamp', field: 'timestamp', editable: "never"})
@@ -65,49 +64,43 @@ class App extends Component {
 	componentDidMount() {
 		this.downloadData(this.props.url)
 
-
 	}
 
 	rowField() {
 		const dataRows = []
 		this.state.users_data.map((element, index) => {
 			let row = {}
-
-			Object.keys(element.answers).forEach(key => {
-				row[`a${key}`] = element.answers[key]
+			this.state.columns.forEach((el, i) => {
+				row[el.field] = '-'
 			})
-			row['date'] = element.date
-			row['timestamp'] = element.timestamp
+			Object.keys(row).forEach(key => {
+
+				if (element.answers[key] != undefined) {
+					row[key] = element.answers[key]
+				} else {
+					row[key] = '-'
+				}
+			})
+			// row.date = element.date
+			// row.timestamp = element.timestamp
+			console.log(row)
+
 			dataRows[index] = row
 		})
+
+
 		this.setState({users_row: dataRows})
+
 	}
 
 	render() {
 
-		const rows = () => {
-			const dataRows = []
-			this.state.users_data.map((element, index) => {
-				let row = {}
-
-				Object.keys(element.answers).forEach(key => {
-					row[`a${key}`] = element.answers[key]
-				})
-				row['date'] = element.date
-				row['timestamp'] = element.timestamp
-				dataRows[index] = row
-				this.state.users_row[index] = row
-			})
-		}
-
 		return (
-
-
 			<div className="App">
-				< button onClick={() => console.log(this.state)}>show state</button>
-				<button onClick={() => this.columns()}>show sdsaftate</button>
+				<button onClick={() => console.log(this.state)}>show state</button>
 				<button onClick={() => this.rowField()}>show rowField</button>
-				<MaterialTable columns={this.state.columns} title={this.state.main_title} data={this.state.users_row}/>
+				<h2>Заполнило форму {this.state.users_data.length}</h2>
+				{/*<MaterialTable columns={this.state.columns} title={this.state.main_title} data={this.state.users_row}/>*/}
 			</div>
 		);
 	};
