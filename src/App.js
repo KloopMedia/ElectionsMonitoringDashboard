@@ -18,8 +18,8 @@ class App extends Component {
 			<AuthProvider>
 				<div className={'App'}>
 					<Router>
-						<PrivateRoute exact path={"/kloop-table/"} component={Home}/>
-						<Route exact path={"/kloop-table/login"} component={Login}/>
+						<PrivateRoute exact path={"/ElectionsMonitoringDashboard/"} component={Home}/>
+						<Route exact path={"/ElectionsMonitoringDashboard/login"} component={Login}/>
 					</Router>
 				</div>
 			</AuthProvider>
