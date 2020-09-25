@@ -51,6 +51,7 @@ class App extends Component {
 
 				Object.keys(el).forEach(key => {
 					columnsName[key] = el[key]
+					// console.log(key)
 				})
 				columnsName['id'] = dataKeys[i]
 				if (columnsName['district']) {
@@ -59,6 +60,14 @@ class App extends Component {
 				else {
 					columnsName['district'] = 'none'
 				}
+				if (columnsName['polling_station']) {
+					// pass
+				}
+				else {
+					columnsName['polling_station'] = 'none'
+				}
+				
+				// console.log(columnsName)
 				dataRows[i] = columnsName
 			})
 			this.setState({data: dataRows})
@@ -74,7 +83,7 @@ class App extends Component {
 	}
 
 	render() {
-
+		console.log(this.state.data)
 		return (
 			<div className="App">
 				<MaterialTable columns={this.state.columns}
