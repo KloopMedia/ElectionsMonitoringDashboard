@@ -14,10 +14,8 @@ class App extends Component {
 	downloadData = () => {
 		let urlString = queryString.parse(window.location.search, {decode: false})
 		console.log(urlString)
-		if (true) {
-			fetch('https://raw.githubusercontent.com/Kabirov7/kloop-forms-test/master/kloop-table/config.json')
-				// if (urlString.url) {
-				// 	fetch(urlString.url)
+		if (urlString.url) {
+				fetch(urlString.url)
 				.then((response) => {
 					console.log("RESPONSE", response)
 					return response.json();
@@ -55,9 +53,14 @@ class App extends Component {
 					columnsName[key] = el[key]
 				})
 				columnsName['id'] = dataKeys[i]
+				if (columnsName['district']) {
+					// pass
+				}
+				else {
+					columnsName['district'] = 'none'
+				}
 				dataRows[i] = columnsName
 			})
-
 			this.setState({data: dataRows})
 		})
 
