@@ -8,6 +8,7 @@ export default function MTable(props) {
 		title={props.title}
 		columns={props.columns}
 		data={props.data}
+		options={{paging: false}}
 		cellEditable={{
 			onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
 				return new Promise((resolve, reject) => {

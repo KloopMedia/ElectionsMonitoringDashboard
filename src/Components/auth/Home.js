@@ -10,6 +10,7 @@ import {
 import Tablets from "../../Components/auth/Tables"
 import AdminTable from "../../Components/auth/AdminTable"
 import MainAdminTable from "../../Components/auth/MainAdminTable"
+import Dasboard from "../../Components/auth/Dashboard"
 const queryString = require('query-string');
 
 
@@ -59,7 +60,7 @@ const Home = () => {
 					<Switch>
 						<Route exact path="/ElectionsMonitoringDashboard/tablets" component={Tablets}/>
 						<Route exact path="/ElectionsMonitoringDashboard/admin" component={AdminTable}/>
-						<Route exact path="/ElectionsMonitoringDashboard/admin-role" component={MainAdminTable}/>
+						<Route exact path="/ElectionsMonitoringDashboard/admin-role" component={Dasboard}/>
 					</Switch>
 				</div>
 			</Router>
