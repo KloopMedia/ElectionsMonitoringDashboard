@@ -21,7 +21,7 @@ const Dashboard = () => {
 				.then(response => response.json())
 				.then(data => {
 					console.log("DATA", data);
-                    setColumns(data.fields.mainAdminTable)
+                    setColumns(data.mainAdminTable)
 				});
 		} else {
 			console.log("ERROR: no url detected")

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import app from "../../utils/firebase.js";
 import {
-	BrowserRouter as Router,
+	HashRouter as Router,
 	Switch,
 	Route,
 	Link,
@@ -11,32 +11,12 @@ import Tablets from "../../Components/auth/Tables"
 import AdminTable from "../../Components/auth/AdminTable"
 import MainAdminTable from "../../Components/auth/MainAdminTable"
 import Dasboard from "../../Components/auth/Dashboard"
+import TableSelector from "../../Components/auth/TableSelector"
+import AnswersTable from '../../Components/auth/AnswersTable'
 const queryString = require('query-string');
 
 
 const Home = () => {
-	const [forms, setForms] = useState([])
-	const [home, setHome] = useState("")
-
-	useEffect(() => {
-		let urlString = queryString.parse(window.location.search)
-		console.log(urlString)
-		setHome(urlString.url)
-		if (urlString.url) {
-			fetch(urlString.url)
-				.then((response) => {
-					console.log("RESPONSE", response)
-					return response.json();
-				})
-				.then((data) => {
-					console.log("DATA", data);
-					setForms(data)
-				});
-		} else {
-			console.log("ERROR: no url detected")
-		}
-	}, [])
-
 	return (
 		<>
 			<h1>Home</h1>
@@ -46,21 +26,22 @@ const Home = () => {
 					<nav>
 						<ul>
 							<li>
-								<Link to={"/ElectionsMonitoringDashboard/tablets" + window.location.search}>Формы</Link>
+								<Link to={"/tables"}>Формы</Link>
 							</li>
 							<li>
-								<Link to={"/ElectionsMonitoringDashboard/admin" + window.location.search}>Таблица Атая</Link>
+								<Link to={"/admin"}>Таблица Атая</Link>
 							</li>
 							<li>
-								<Link to={"/ElectionsMonitoringDashboard/admin-role" + window.location.search}>Таблица юзеров с ролями</Link>
+								<Link to={"/admin-role"}>Таблица юзеров с ролями</Link>
 							</li>
 						</ul>
 					</nav>
 
 					<Switch>
-						<Route exact path="/ElectionsMonitoringDashboard/tablets" component={Tablets}/>
-						<Route exact path="/ElectionsMonitoringDashboard/admin" component={AdminTable}/>
-						<Route exact path="/ElectionsMonitoringDashboard/admin-role" component={Dasboard}/>
+						<Route exact path="/tables" component={TableSelector}/>
+						<Route path={"/tables/:table"} component={AnswersTable} />
+						<Route exact path="/admin" component={AdminTable}/>
+						<Route exact path="/admin-role" component={Dasboard}/>
 					</Switch>
 				</div>
 			</Router>
