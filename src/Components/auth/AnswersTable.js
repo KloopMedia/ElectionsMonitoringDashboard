@@ -117,6 +117,9 @@ const AnswersTable = () => {
 						else if (ext && ext[0] === '.mp4') {
 							return <button key={i} onClick={() => window.open(url)}>{"video" + i}</button>
 						}
+						else {
+							return <button key={i} onClick={() => window.open(url)}>{"neither image or video" + i}</button>
+						}
 					})}
 				</Grid>
 				)
@@ -152,7 +155,7 @@ const AnswersTable = () => {
 					let len = question.subquestion.length
 					for (let i = 0; i < len; i++) {
 						if (d[ind] && d[ind][i]) {
-							row.push(d[ind][i])
+							row.push(question.answer[d[ind][i]])
 						}
 						else {
 							row.push('-')
