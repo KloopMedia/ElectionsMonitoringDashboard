@@ -41,7 +41,6 @@ const Tables = () => {
         ready ? <div>
             <ul>
             {forms.map((el, i) => {
-                console.log(el)
               return ( 
                 <li key={i}>
                   <Link to={url + el.path}>{el.label}</Link>

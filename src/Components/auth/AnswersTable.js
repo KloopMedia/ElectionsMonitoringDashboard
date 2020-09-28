@@ -3,21 +3,14 @@ import MaterialTable from "material-table";
 import firebase from "../../utils/firebase";
 import { withRouter, useParams, Redirect } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress'
+import {nest} from 'd3-collection'
+import Grid from '@material-ui/core/Grid'
 
 const queryString = require('query-string');
 
 const AnswersTable = () => {
-	// state = {
-	// 	main_title: '',
-	// 	questions: [],
-	// 	columns: [],
-	// 	users: [],
-	// 	users_data: [],
-	// 	users_row: [],
-	// 	ready: false
-	// }
-
 	const [answersData, setAnswersData] = useState(null)
+	const [filesData, setFilesData] = useState(null)
 	const [columns, setColumns] = useState(null)
 	const [formData, setFormData] = useState(null)
 	const [ready, setReady] = useState(false)
@@ -26,7 +19,7 @@ const AnswersTable = () => {
 	let { table } = useParams();
 
 	useEffect(() => {
-		console.log(table)
+		// console.log(table)
 		// Get columns data
 		let urlString = queryString.parse(window.location.search, { decode: false })
 		if (urlString.url) {
@@ -37,7 +30,7 @@ const AnswersTable = () => {
 						if (d.path === '/' + table) {
 							fetch(d.url).then(r => r.json()).then(f => {
 								setFormData(f)
-								console.log(f)
+								// console.log(f)
 								createColumns(f.questions)
 							})
 						}
@@ -53,6 +46,7 @@ const AnswersTable = () => {
 		const getData = async () => {
 			let users = []
 			let data = []
+			let files = []
 			let usersRef = firebase.firestore().collection('users')
 			await usersRef.get().then(docs => {
 				docs.forEach(doc => users.push({id: doc.id, data: doc.data()}))
@@ -62,16 +56,30 @@ const AnswersTable = () => {
 					let userRef = rootRef.doc(user.id)
 					let answersRef = userRef.collection("answers")
 					await answersRef.where("form_name", "==", formData.main_title).get().then(querySnapshot => {
-						querySnapshot.forEach(async snap => {
+						querySnapshot.forEach(snap => {
 							// console.log(snap.data())
-							let d = await snap.data()
-							data.push({ ...d.answers, name:user.data.name, date: d.date })
+							let d = snap.data()
+							data.push({ ...d.answers, name:user.data.name, date: d.date, id: snap.id })
+						})
+					})
+					let filesRef = userRef.collection("files")
+					await filesRef.where("form_name", "==", formData.main_title).get().then(querySnapshot => {
+						querySnapshot.forEach(snap => {
+							// console.log(snap.data())
+							let d = snap.data()
+							if (d.filepath) {
+								files.push({ id: d.answer_id, photo_url: d.filepath })
+							}
+							else if (d.public_url) {
+								files.push({ id: d.answer_id, photo_url: d.public_url })
+							}
 						})
 					})
 				})
 				Promise.all(us).then(() => {
 					setAnswersData(data)
-					createRows(data)
+					setFilesData(files)
+					createRows(data, files)
 				})
 			})
 		}
@@ -97,12 +105,45 @@ const AnswersTable = () => {
 		cols.forEach((col, i) => col['field'] = i.toString())
 		cols.unshift({title: 'Username', field: 'name'})
 		cols.push({title: 'Date', field: 'date'})
-		console.log(cols)
+		cols.push({title: "Images", field: 'image', render: rowData => {
+			if (rowData.image) {
+				return (
+				<Grid container display="flex" style={{flexWrap: 'inherit'}}>
+					{rowData.image.map((url, i) => {
+						let ext = url.match(/(\.\w+)+(?!.*(\w+)(\.\w+)+)/g)
+						if (ext && (ext[0] === '.jpg' || ext[0] === '.png' || ext[0] === '.svg')) {
+							return <img key={i} src={url} alt={"image" + i} style={{width: 100, cursor: "pointer", paddingRight: '5px'}} onClick={() => window.open(url)} />
+						}
+						else if (ext && ext[0] === '.mp4') {
+							return <button key={i} onClick={() => window.open(url)}>{"video" + i}</button>
+						}
+					})}
+				</Grid>
+				)
+			}
+			else {
+				return '[null]'
+			}
+		}})
 		setColumns(cols)
 	}
 
-	const createRows = (data) => {
-		console.log(data)
+	const createRows = (data, files) => {
+		// console.log(data)
+
+		let filesObject = {}
+		if (files.length > 0) {
+			let filesNested = nest()
+			.key(function(d) { return d.id; })
+			.rollup(function(v) { return v.map(f => f.photo_url)})
+			.entries(files);
+			// console.log("NESTED", filesNested)
+			filesNested.forEach(file => {
+				filesObject[file.key] = file.value
+			})
+		}
+		// console.log(filesObject)
+
 		let rows = []
 		data.forEach(d => {
 			let row = []
@@ -143,6 +184,7 @@ const AnswersTable = () => {
 							date.getSeconds().toString().length < 2 ? '0' + date.getSeconds() : date.getSeconds()].join(':').toString();
 
 			tmp['date'] = formatedDate
+			tmp['image'] = filesObject[d.id]
 			rows.push(tmp)
 		})
 		setRows(rows)
