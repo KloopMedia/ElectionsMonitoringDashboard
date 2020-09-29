@@ -91,7 +91,10 @@ const Dashboard = () => {
             <MaterialTable
             columns={columns}
             data={userData}
-            options={{paging: false}}
+            options={{
+                paging: false, 
+                exportButton: true
+                }}
             cellEditable={{
                 onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
                     return firebase.firestore().collection('users').doc(rowData.id).update({[columnDef.field]: newValue})

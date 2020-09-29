@@ -201,7 +201,10 @@ const AnswersTable = () => {
 				title={formData.main_title + " (Записей: " + rows.length + ")"}
 		    columns={columns}
 		    data={rows}
-		    options={{paging: false}}
+		    options={{
+				paging: false, 
+				exportButton: true
+			}}
 		    />
 		</div> : <div style = {{
       position: 'absolute',
