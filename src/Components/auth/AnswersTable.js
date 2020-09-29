@@ -59,7 +59,7 @@ const AnswersTable = () => {
 						querySnapshot.forEach(snap => {
 							// console.log(snap.data())
 							let d = snap.data()
-							data.push({ ...d.answers, name:user.data.name, date: d.date, id: snap.id })
+							data.push({ ...d.answers, ...user.data, date: d.date, id: snap.id })
 						})
 					})
 					let filesRef = userRef.collection("files")
@@ -79,7 +79,8 @@ const AnswersTable = () => {
 				Promise.all(us).then(() => {
 					setAnswersData(data)
 					setFilesData(files)
-					createRows(data, files)
+					let userKeys = Object.keys(users[0].data)
+					createRows(data, files, userKeys)
 				})
 			})
 		}
@@ -103,6 +104,7 @@ const AnswersTable = () => {
 		})
 
 		cols.forEach((col, i) => col['field'] = i.toString())
+		cols.unshift({title: 'Full_name', field: 'full_name'})
 		cols.unshift({title: 'Username', field: 'name'})
 		cols.push({title: 'Date', field: 'date'})
 		cols.push({title: "Images", field: 'image', render: rowData => {
@@ -131,7 +133,7 @@ const AnswersTable = () => {
 		setColumns(cols)
 	}
 
-	const createRows = (data, files) => {
+	const createRows = (data, files, userKeys) => {
 		// console.log(data)
 
 		let filesObject = {}
@@ -176,22 +178,30 @@ const AnswersTable = () => {
 			Object.values(columns).forEach(column => {
 				tmp[column.field] = row[column.field]
 			})
-			tmp['name'] = d.name
-			let date = new Date({...d.date}.seconds * 1000)
-			let formatedDate = [
-						date.getDate().toString().length < 2 ? '0' + date.getDate() : date.getDate(),
-						(date.getMonth()+1).toString().length < 2 ? '0' + (date.getMonth()+1) : (date.getMonth()+1),
-						date.getFullYear()].join('/')+' '+
-						[date.getHours().toString().length < 2 ? '0' + date.getHours() : date.getHours(),
-							date.getMinutes().toString().length < 2 ? '0' + date.getMinutes() : date.getMinutes(),
-							date.getSeconds().toString().length < 2 ? '0' + date.getSeconds() : date.getSeconds()].join(':').toString();
-
-			tmp['date'] = formatedDate
+			console.log(userKeys)
+			userKeys.forEach(key => {
+				tmp[key] = d[key]
+				if (key === 'date') {
+					tmp[key] = formatDate(d[key])
+				}
+			})
 			tmp['image'] = filesObject[d.id]
 			rows.push(tmp)
 		})
 		setRows(rows)
 		setReady(true)
+	}
+
+	const formatDate = (d) => {
+		let date = new Date({...d}.seconds * 1000)
+		let formatedDate = [
+					date.getDate().toString().length < 2 ? '0' + date.getDate() : date.getDate(),
+					(date.getMonth()+1).toString().length < 2 ? '0' + (date.getMonth()+1) : (date.getMonth()+1),
+					date.getFullYear()].join('/')+' '+
+					[date.getHours().toString().length < 2 ? '0' + date.getHours() : date.getHours(),
+						date.getMinutes().toString().length < 2 ? '0' + date.getMinutes() : date.getMinutes(),
+						date.getSeconds().toString().length < 2 ? '0' + date.getSeconds() : date.getSeconds()].join(':').toString();
+		return formatedDate
 	}
 
 
