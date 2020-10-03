@@ -77,7 +77,7 @@ class App extends Component {
 										})
 
 
-										console.log(answers)
+										// console.log(answers)
 
 										keys.forEach(key => {
 											if (answers[key]) {
@@ -90,7 +90,7 @@ class App extends Component {
 										let arr = [...this.state.users_row]
 										arr.push(row)
 										this.setState({users_row: arr})
-										console.log(arr)
+										// console.log(arr)
 									}
 								})
 							})
@@ -115,7 +115,7 @@ class App extends Component {
 			}
 		})
 		let cols = tmpCols.map((col, i) => col = {...col, field: i})
-		console.log(cols)
+		// console.log(cols)
 		this.setState({columns: cols})
 	}
 

@@ -83,7 +83,7 @@ class App extends Component {
 	}
 
 	render() {
-		console.log(this.state.data)
+		console.log('asdfsaf',this.state.data)
 		return (
 			<div className="App">
 				<MaterialTable columns={this.state.columns}

@@ -8,14 +8,20 @@ export default function MTable(props) {
 		title={props.title}
 		columns={props.columns}
 		data={props.data}
-		options={{paging: false}}
+		options={{
+			paging: false,
+			filtering: true,
+			fixedColumns: {
+				left: 2,
+			}
+		}}
 		cellEditable={{
 			onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
 				return new Promise((resolve, reject) => {
 
 					const key = Object.keys(rowData)[Object.values(rowData).indexOf(oldValue)]
 
-					props.save_role(rowData.id, key ,newValue)
+					props.save_role(rowData.id, key, newValue)
 					setTimeout(resolve, 1);
 				});
 			}

@@ -96,18 +96,18 @@ const AnswersTable = () => {
 		let cols = []
 		questions.forEach((question, i) => {
 			if (question.type === 'multiradio') {
-				question.subquestion.forEach(subquestion => cols.push({ title: subquestion.q }))
+				question.subquestion.forEach(subquestion => cols.push({ title: subquestion.q, width: 200}))
 			}
 			else {
-				cols.push({ title: question.title })
+				cols.push({ title: question.title, width: 200})
 			}
 		})
-
+		console.log(cols)
 		cols.forEach((col, i) => col['field'] = i.toString())
-		cols.unshift({title: 'Full_name', field: 'full_name'})
-		cols.unshift({title: 'Username', field: 'name'})
-		cols.push({title: 'Date', field: 'date'})
-		cols.push({title: "Images", field: 'image', render: rowData => {
+		cols.unshift({title: 'Full_name', field: 'full_name', width: 200})
+		cols.unshift({title: 'Username', field: 'name', width: 200})
+		cols.push({title: 'Date', field: 'date', width: 200})
+		cols.push({title: "Images", field: 'image', width: 200, render: rowData => {
 			if (rowData.image) {
 				return (
 				<Grid container display="flex" style={{flexWrap: 'inherit'}}>
@@ -178,7 +178,7 @@ const AnswersTable = () => {
 			Object.values(columns).forEach(column => {
 				tmp[column.field] = row[column.field]
 			})
-			console.log(userKeys)
+			// console.log(userKeys)
 			userKeys.forEach(key => {
 				tmp[key] = d[key]
 				if (key === 'date') {
@@ -212,8 +212,13 @@ const AnswersTable = () => {
 		    columns={columns}
 		    data={rows}
 		    options={{
+		    	 filtering: true,
 				paging: false, 
-				exportButton: true
+				exportButton: true,
+					fixedColumns: {
+						left: 1,
+					}
+
 			}}
 		    />
 		</div> : <div style = {{
