@@ -212,8 +212,10 @@ const AnswersTable = () => {
 		    columns={columns}
 		    data={rows}
 		    options={{
-		    	 filtering: true,
-				paging: false, 
+				filtering: true,
+				pageSize: 20,
+				emptyRowsWhenPaging: false,
+				pageSizeOptions: [20, 50, 150], 
 				exportButton: true,
 					fixedColumns: {
 						left: 1,

@@ -94,7 +94,9 @@ const Dashboard = () => {
 				data={userData}
 				options={{
 					filtering: true,
-					paging: false,
+					pageSize: 20,
+                    emptyRowsWhenPaging: false,
+                    pageSizeOptions: [20, 50, 150],
 					exportButton: true,
 					fixedColumns: {
 						left: 1,
