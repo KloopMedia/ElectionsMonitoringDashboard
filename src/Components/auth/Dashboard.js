@@ -93,7 +93,8 @@ const Dashboard = () => {
             data={userData}
             options={{
                 paging: false, 
-                exportButton: true
+                exportButton: true,
+                filtering: true
                 }}
             cellEditable={{
                 onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
