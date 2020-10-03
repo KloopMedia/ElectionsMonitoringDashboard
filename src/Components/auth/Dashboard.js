@@ -90,6 +90,7 @@ const Dashboard = () => {
 	return (
 		ready ? <div>
 			<MaterialTable
+                title={"Записей: " + userData.length}
 				columns={columns}
 				data={userData}
 				options={{

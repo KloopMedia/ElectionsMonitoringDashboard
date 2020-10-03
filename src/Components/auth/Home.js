@@ -13,6 +13,9 @@ import MainAdminTable from "../../Components/auth/MainAdminTable"
 import Dasboard from "../../Components/auth/Dashboard"
 import TableSelector from "../../Components/auth/TableSelector"
 import AnswersTable from '../../Components/auth/AnswersTable'
+import AbsentTableSelector from '../../Components/auth/AbsentTableSelector'
+import AbsentTable from '../../Components/auth/AbsentTable'
+
 const queryString = require('query-string');
 
 
@@ -34,6 +37,9 @@ const Home = () => {
 							<li>
 								<Link to={"/admin-role"}>Таблица юзеров с ролями</Link>
 							</li>
+							<li>
+								<Link to={"/absent"}>Таблица не отправивших</Link>
+							</li>
 						</ul>
 					</nav>
 
@@ -42,6 +48,8 @@ const Home = () => {
 						<Route path={"/tables/:table"} component={AnswersTable} />
 						<Route exact path="/admin" component={AdminTable}/>
 						<Route exact path="/admin-role" component={Dasboard}/>
+						<Route exact path="/absent" component={AbsentTableSelector}/>
+						<Route path={"/absent/:table"} component={AbsentTable} />
 					</Switch>
 				</div>
 			</Router>
