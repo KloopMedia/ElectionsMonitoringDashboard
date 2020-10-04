@@ -274,8 +274,10 @@ const AnswersTable = () => {
 	return (
 		ready ? <div>
 			{/* <button onClick={createRow}>asd</button> */}
+			<p>Форму отправили: {senders.length} человек</p>
+			<p>Форму не отправили: {rows.length} человек</p>
 		    <MaterialTable
-            title={"Всего не ответило (есть контакты): " + rows.length + " - " + formData.main_title}
+            title={formData.main_title}
 		    columns={columns}
 		    data={rows}
 		    options={{
