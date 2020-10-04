@@ -59,7 +59,7 @@ const AnswersTable = () => {
 						querySnapshot.forEach(snap => {
 							// console.log(snap.data())
 							let d = snap.data()
-							data.push({ ...d.answers, ...user.data, date: d.date, id: snap.id })
+							data.push({ ...d.answers, ...user.data, date: d.timestamp, id: snap.id })
 						})
 					})
 					let filesRef = userRef.collection("files")
