@@ -275,7 +275,7 @@ const AnswersTable = () => {
 		ready ? <div>
 			{/* <button onClick={createRow}>asd</button> */}
 		    <MaterialTable
-            title={"Всего не ответило (контактные данные): " + rows.length + " - " + formData.main_title}
+            title={"Всего не ответило (есть контакты): " + rows.length + " - " + formData.main_title}
 		    columns={columns}
 		    data={rows}
 		    options={{
