@@ -17,7 +17,9 @@ const AnswersTable = () => {
     const [rows, setRows] = useState(null)
     const [senders, setSenders] = useState(null)
     const [absentUsers, setAbsentUsers] = useState(null)
-    const [userContactData, setUserContactData] = useState(null)
+	const [userContactData, setUserContactData] = useState(null)
+	const [role, setRole] = useState(null)
+	const [usersData, setUsersData] = useState(null)
 
 	let { table } = useParams();
 
@@ -33,6 +35,7 @@ const AnswersTable = () => {
 						if (d.path === '/' + table) {
 							fetch(d.url).then(r => r.json()).then(f => {
 								setFormData(f)
+								setRole(d.role)
 								// console.log(f)
 							})
                         }
@@ -51,21 +54,30 @@ const AnswersTable = () => {
 	useEffect(() => {
 		// Get users data
 		const getData = async () => {
-            let users = []
+			let users = []
+			let usersObject = {}
             let usersId = []
             let sendersId = []
 			let usersRef = firebase.firestore().collection('users')
 			await usersRef.get().then(docs => {
                 docs.forEach(doc => {
-                    usersId.push(doc.id)
-                    users.push({id: doc.id, data: doc.data()})
+					// console.log(doc.data())
+					// console.log(role)
+					// if (doc.data().role === role || role === 'all') {
+					// 	// usersId.push(doc.id)
+					// 	// users.push({id: doc.id, ...doc.data()})
+					// 	console.log("ROLE", doc.id, doc.data().role)
+					// }
+					usersId.push(doc.id)
+					users.push({id: doc.id, ...doc.data()})
+					usersObject[doc.id] = doc.data()
                 })
 			}).then(async () => {
 				let rootRef = firebase.firestore().collection('responses')
 				let us = await users.map(async user => {
 					let userRef = rootRef.doc(user.id)
 					let answersRef = userRef.collection("answers")
-					await answersRef.where("form_name", "==", formData.main_title).get().then(querySnapshot => {
+					await answersRef.where("identifier", "==", formData.identifier).get().then(querySnapshot => {
 						querySnapshot.forEach(snap => {
 							// console.log(snap.data())
                             sendersId.push(user.id)
@@ -81,16 +93,18 @@ const AnswersTable = () => {
                     console.log("nonunique replies", sendersId.length)
                     console.log("unique replies: ", uniqueIds.length)
                     console.log("haven't replied: ", absents.length)
-                    setAbsentUsers(absents)
+					setAbsentUsers(absents)
+					console.log(usersObject)
+					setUsersData(usersObject)
 				})
 			})
 		}
 
-        if (formData) {
+        if (formData && role) {
             getData()
         }
         
-    }, [formData])
+    }, [formData, role])
 
 
     useEffect(() => {
@@ -105,22 +119,23 @@ const AnswersTable = () => {
                     await querySnapshot.forEach(async snap => {
                         // console.log(snap.data())
                         // contactData =  snap.data()
-                        contactData.push(snap.data().answers)
+                        contactData.push({id: user, ...snap.data().answers})
                     })
                 })
             })
             Promise.all(rows).then(() => {
                 console.log(contactData)
                 setUserContactData(contactData)
-                setReady(true)
+				// setReady(true)
+				createRow(contactData)
             })
             
         }
 
-        if (absentUsers) {
+        if (absentUsers && usersData && role) {
             makeRows()
         }
-    }, [absentUsers])
+    }, [absentUsers, usersData, role])
     
 
 
@@ -135,7 +150,10 @@ const AnswersTable = () => {
 			}
 		})
 		console.log(cols)
-        cols.forEach((col, i) => col['field'] = i.toString())
+		cols.forEach((col, i) => col['field'] = i.toString())
+		
+		// cols.unshift({title: 'Full_name', field: 'full_name', width: 200})
+		cols.unshift({title: 'Role', field: 'role', width: 200})
         
 		// cols.unshift({title: 'Full_name', field: 'full_name', width: 200})
 		// cols.unshift({title: 'Username', field: 'name', width: 200})
@@ -237,13 +255,29 @@ const AnswersTable = () => {
 	// 	return formatedDate
 	// }
 
+	const createRow = (data) => {
+		let tmpRows = []
+		data.forEach(d => {
+			if (d.id && usersData[d.id]) {
+				if (usersData[d.id].role === role || role === 'all') {
+					console.log(usersData[d.id].role)
+					console.log(role)
+					tmpRows.push({...d, ...usersData[d.id]})
+				}
+			}
+		})
+		setRows(tmpRows)
+		setReady(true)
+	}
+
 
 	return (
 		ready ? <div>
+			{/* <button onClick={createRow}>asd</button> */}
 		    <MaterialTable
-            title={"Всего не ответило: " + absentUsers.length + " (из них c контактами: " + userContactData.length + ")"}
+            title={"Всего не ответило (контактные данные): " + rows.length + " - " + formData.main_title}
 		    columns={columns}
-		    data={userContactData}
+		    data={rows}
 		    options={{
 				filtering: true,
 				pageSize: 20,
