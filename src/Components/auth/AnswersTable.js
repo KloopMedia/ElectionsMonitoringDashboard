@@ -113,7 +113,7 @@ const AnswersTable = () => {
 				<Grid container display="flex" style={{flexWrap: 'inherit'}}>
 					{rowData.image.map((url, i) => {
 						let ext = url.match(/(\.\w+)+(?!.*(\w+)(\.\w+)+)/g)
-						if (ext && (ext[0] === '.jpg' || ext[0] === '.png' || ext[0] === '.svg')) {
+						if (ext && (ext[0] === '.jpg' || ext[0] === '.png' || ext[0] === '.svg' || ext[0] === '.jpeg')) {
 							return <img key={i} src={url} alt={"image" + i} style={{width: 100, cursor: "pointer", paddingRight: '5px'}} onClick={() => window.open(url)} />
 						}
 						else if (ext && ext[0] === '.mp4') {

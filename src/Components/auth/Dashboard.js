@@ -98,10 +98,7 @@ const Dashboard = () => {
 					pageSize: 20,
                     emptyRowsWhenPaging: false,
                     pageSizeOptions: [20, 50, 150],
-					exportButton: true,
-					fixedColumns: {
-						left: 1,
-					}
+					exportButton: true
 				}}
 				cellEditable={{
 					onCellEditApproved: (newValue, oldValue, rowData, columnDef) => {
