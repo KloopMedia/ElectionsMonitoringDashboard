@@ -94,7 +94,7 @@ const AnswersTable = () => {
                     console.log("unique replies: ", uniqueIds.length)
                     console.log("haven't replied: ", absents.length)
 					setAbsentUsers(absents)
-					console.log(usersObject)
+					// console.log(usersObject)
 					setUsersData(usersObject)
 				})
 			})
@@ -124,7 +124,7 @@ const AnswersTable = () => {
                 })
             })
             Promise.all(rows).then(() => {
-                console.log(contactData)
+                // console.log(contactData)
                 setUserContactData(contactData)
 				// setReady(true)
 				createRow(contactData)
@@ -149,7 +149,7 @@ const AnswersTable = () => {
 				cols.push({ title: question.title, width: 200})
 			}
 		})
-		console.log(cols)
+		// console.log(cols)
 		cols.forEach((col, i) => col['field'] = i.toString())
 		
 		// cols.unshift({title: 'Full_name', field: 'full_name', width: 200})
@@ -260,8 +260,8 @@ const AnswersTable = () => {
 		data.forEach(d => {
 			if (d.id && usersData[d.id]) {
 				if (usersData[d.id].role === role || role === 'all') {
-					console.log(usersData[d.id].role)
-					console.log(role)
+					// console.log(usersData[d.id].role)
+					// console.log(role)
 					tmpRows.push({...d, ...usersData[d.id]})
 				}
 			}

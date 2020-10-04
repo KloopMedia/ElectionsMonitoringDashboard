@@ -181,10 +181,9 @@ const AnswersTable = () => {
 			// console.log(userKeys)
 			userKeys.forEach(key => {
 				tmp[key] = d[key]
-				if (key === 'date') {
-					tmp[key] = formatDate(d[key])
-				}
 			})
+			// console.log(d['date'])
+			tmp['date'] = formatDate(d['date'])
 			tmp['image'] = filesObject[d.id]
 			rows.push(tmp)
 		})
